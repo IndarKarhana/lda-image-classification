@@ -1,0 +1,36 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Large data files (can be regenerated)
+data/cifar-100-python/
+data/cifar-100-python.tar.gz
+data/*.npz
+features/saved/*.npy
+
+# Keep results but ignore large feature caches
+# results/ is tracked
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
