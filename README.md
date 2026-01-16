@@ -206,6 +206,8 @@ We hypothesized that **higher-dimensional features contain more redundancy** tha
 
 All experimental results are stored in the `results/` directory:
 
+### CIFAR-100 Results
+
 | File | Description | Experiments |
 |------|-------------|-------------|
 | [`results/results.csv`](results/results.csv) | Main LDA vs PCA vs RP comparison | 105 experiments (3 methods × 7 components × 5 seeds) |
@@ -214,6 +216,13 @@ All experimental results are stored in the `results/` directory:
 | [`results/modern_methods.csv`](results/modern_methods.csv) | LDA vs Metric Learning comparison | 12 experiments |
 | [`results/classwise_analysis.csv`](results/classwise_analysis.csv) | Per-class accuracy breakdown | 100 classes analyzed |
 | [`results/deployment_analysis.csv`](results/deployment_analysis.csv) | Edge deployment metrics | 16 configurations |
+
+### Tiny ImageNet Results
+
+| File | Description | Experiments |
+|------|-------------|-------------|
+| [`results/tiny_imagenet/backbone_comparison.csv`](results/tiny_imagenet/backbone_comparison.csv) | Multi-backbone with **detailed timing** | 60 experiments (4 backbones × 15 configs) |
+| [`results/tiny_imagenet/classwise_analysis.csv`](results/tiny_imagenet/classwise_analysis.csv) | Per-class accuracy breakdown | 200 classes analyzed |
 
 ### Feature Cache Location
 
@@ -384,40 +393,125 @@ Extracted features are cached in `data/` for reproducibility:
 
 ---
 
+## Experiment 7: Tiny ImageNet Generalization Study
+
+**Motivation:** Does the surprising LDA advantage from CIFAR-100 generalize to larger datasets?
+
+### Dataset Comparison
+
+| Property | CIFAR-100 | Tiny ImageNet |
+|----------|-----------|---------------|
+| **Classes** | 100 | 200 |
+| **Training Images** | 50,000 | 100,000 |
+| **Test Images** | 10,000 | 10,000 |
+| **Image Size** | 32×32 | 64×64 |
+| **Max LDA Components** | 99 | 199 |
+
+### Tiny ImageNet Results
+
+**🎯 KEY FINDING: The LDA advantage GENERALIZES to Tiny ImageNet!**
+
+| Backbone | Full Features | Best LDA | **Δ Accuracy** | Clf Speedup |
+|----------|--------------|----------|----------------|-------------|
+| ResNet-18 | 58.22% | 62.69% | **+4.47%** ✓ | 4.2× |
+| ResNet-50 | 71.54% | 71.83% | **+0.29%** ✓ | 2.1× |
+| MobileNetV3-Small | 56.69% | 60.97% | **+4.28%** ✓ | 3.5× |
+| EfficientNet-B0 | 70.03% | 70.41% | **+0.38%** ✓ | 1.6× |
+
+**All 4 backbones show improvement from LDA over full features!**
+
+### Pattern Analysis: CIFAR-100 vs Tiny ImageNet
+
+| Pattern | CIFAR-100 | Tiny ImageNet | Consistent? |
+|---------|-----------|---------------|-------------|
+| LDA beats full features (ResNet-18) | +2.47% | +4.47% | ✅ YES |
+| Smaller backbones benefit more | ResNet-18 > ResNet-50 | Same pattern | ✅ YES |
+| LDA beats PCA | +1.87% avg | +1.49% avg | ✅ YES |
+
+### Detailed Timing Breakdown
+
+This experiment includes a **thorough timing breakdown** showing where speedup comes from:
+
+**ResNet-18: Full Features vs LDA-199**
+
+| Step | Full Features | LDA | Speedup |
+|------|---------------|-----|---------|
+| Feature Extraction | Same | Same | 1× |
+| Standardization | 0.31s | 0.26s | 1.2× |
+| LDA Fit | N/A | 1.87s | - |
+| LDA Transform | N/A | 0.09s | - |
+| **Classifier Train** | 80.7s | 19.4s | **4.2×** |
+| **Inference** | 22ms | 11ms | **2.1×** |
+| **TOTAL** | 81.1s | 21.6s | **3.8×** |
+
+**Key Insight:** Feature extraction is identical for all methods (same backbone). The speedup comes entirely from:
+1. **Classifier training on lower-dimensional features** (4.2× faster)
+2. **Faster inference** (2.1× faster)
+
+The LDA overhead (~2s for fit + transform) is negligible compared to the 60s saved in classifier training.
+
+### Class-wise Analysis (Tiny ImageNet, ResNet-18)
+
+| Metric | Value |
+|--------|-------|
+| Classes where LDA helps | **141/200 (70.5%)** |
+| Classes where LDA hurts | 36/200 (18%) |
+| Classes unchanged | 23/200 (11.5%) |
+| Average improvement | +4.47% |
+| Max improvement (single class) | +22% |
+| Max degradation (single class) | -10% |
+
+### Results Files
+
+Tiny ImageNet results are stored separately:
+
+| File | Description |
+|------|-------------|
+| [`results/tiny_imagenet/backbone_comparison.csv`](results/tiny_imagenet/backbone_comparison.csv) | All backbone experiments with detailed timing |
+| [`results/tiny_imagenet/classwise_analysis.csv`](results/tiny_imagenet/classwise_analysis.csv) | Per-class accuracy for 200 classes |
+
+---
+
 ## 8. Key Findings
 
 ### 1. LDA Can IMPROVE Accuracy Over Full Features (Surprising!)
-- ResNet-18: LDA @ 99 components achieves **66.88%** vs **64.41%** for full 512D features
-- This is a **+2.47% improvement** while using 5× fewer dimensions
+- CIFAR-100: ResNet-18 LDA @ 99 achieves **66.88%** vs **64.41%** for full 512D (+2.47%)
+- **Tiny ImageNet: Same pattern!** ResNet-18 LDA @ 199 achieves **62.69%** vs **58.22%** (+4.47%)
+- This is NOT just maintaining accuracy—LDA actively improves it!
 - Suggests LDA acts as regularization by removing noisy/redundant dimensions
 
-### 2. LDA Consistently Outperforms PCA
+### 2. The Finding GENERALIZES Across Datasets
+- Tested on CIFAR-100 (100 classes, 60K images) AND Tiny ImageNet (200 classes, 110K images)
+- All 4 backbones show improvement on both datasets
+- Effect is consistent: **smaller backbones benefit more**
+
+### 3. LDA Consistently Outperforms PCA
 - Average improvement: +1.87% to +4.22% depending on backbone
 - Advantage is **larger at lower dimensions** (more important for edge deployment)
 
-### 3. Higher-Dimensional Features Benefit More from LDA
-- ResNet-50 (2048D): +4.22% gain
+### 4. Higher-Dimensional Features Benefit More from LDA
+- ResNet-50 (2048D): +4.22% gain over PCA
 - EfficientNet (1280D): +1.76% gain
 - ResNet-18 (512D): +1.87% gain
 
-### 4. Massive Runtime Improvements
-- LDA reduces classifier training time by **5-15×** compared to full features
-- ResNet-18: 83.7s → 5.7s (15× faster)
-- ResNet-50: 213.7s → 14.8s (14× faster)
+### 5. Massive Runtime Improvements
+- LDA reduces classifier training time by **2-4×** compared to full features
+- Inference speedup: 2-27× faster
+- Total pipeline speedup: 1.4-3.8×
 
-### 5. Accuracy Plateaus Around 80 Components
+### 6. Accuracy Plateaus Around 80-150 Components
 - Low-dim backbones (512D, 576D): plateau at ~80 components
-- High-dim backbones (1280D, 2048D): continue improving to 99
+- High-dim backbones (1280D, 2048D): continue improving to 99-199
 
-### 6. LDA Beats Modern Metric Learning
+### 7. LDA Beats Modern Metric Learning
 - LDA: 66.88% in 5.91s
 - Metric Learning: 64.08% in 66.62s
 - **LDA is 11× faster AND 2.8% more accurate**
 
-### 7. Class-wise Variability
-- LDA helps 66% of classes, hurts 27%
-- Some classes see +11% improvement, others -10%
-- Suggests room for class-adaptive methods
+### 8. Class-wise Consistency
+- CIFAR-100: LDA helps 66/100 classes (66%)
+- Tiny ImageNet: LDA helps 141/200 classes (70.5%)
+- Consistent pattern across datasets
 
 ---
 

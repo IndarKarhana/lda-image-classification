@@ -17,7 +17,9 @@ __pycache__/
 data/cifar-100-python/
 data/cifar-100-python.tar.gz
 data/*.npz
+data/tiny-imagenet-200/
 features/saved/*.npy
+features/tiny_imagenet/*.npz
 
 # Keep results but ignore large feature caches
 # results/ is tracked
