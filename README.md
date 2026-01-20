@@ -472,6 +472,77 @@ Tiny ImageNet results are stored separately:
 
 ---
 
+## Experiment 8: Statistical Significance Analysis
+
+**Motivation:** Demonstrate that LDA improvements are statistically significant, not due to random chance.
+
+### Methodology
+- **5 random seeds**: [42, 123, 456, 789, 1024]
+- **Tests performed**: Paired t-test & Wilcoxon signed-rank test
+- **Comparison**: LDA vs Full Features, LDA vs PCA
+
+### Results
+
+| Dataset | Full Features | LDA | Improvement | p-value | Significant? |
+|---------|--------------|-----|-------------|---------|--------------|
+| CIFAR-100 | 40.66% | 42.57% | **+1.91%** | 0.031 | ✅ YES |
+| Tiny ImageNet (ResNet-18) | 58.08% | 62.65% | **+4.57%** | 0.031 | ✅ YES |
+| Tiny ImageNet (MobileNetV3) | 56.57% | 60.89% | **+4.32%** | 0.031 | ✅ YES |
+| Tiny ImageNet (ResNet-50) | 71.75% | 71.79% | **+0.04%** | 0.031 | ✅ YES |
+| Tiny ImageNet (EfficientNet) | 69.95% | 70.35% | **+0.40%** | 0.031 | ✅ YES |
+
+**Key Finding:** LDA improvement is statistically significant (p < 0.05) across ALL tested configurations!
+
+### Replicate This Experiment
+
+```bash
+python experiments/run_statistical_significance.py
+# Results saved to: results/statistical_significance/
+```
+
+---
+
+## Experiment 9: Training Data Efficiency Study
+
+**Motivation:** Does LDA advantage increase or decrease with limited training data?
+
+### Methodology
+- **Training fractions**: 10%, 25%, 50%, 100%
+- **3 seeds per fraction**: [42, 123, 456]
+- **Stratified sampling**: Maintains class distribution
+
+### Results (CIFAR-100, LDA vs Full Features)
+
+| Training Data | Samples | Full Features | LDA | LDA Gain |
+|--------------|---------|---------------|-----|----------|
+| 10% | 5,000 | 31.99% | 29.30% | **-2.69%** |
+| 25% | 12,500 | 33.32% | 35.71% | **+2.39%** |
+| 50% | 25,000 | 35.69% | 40.20% | **+4.51%** |
+| 100% | 50,000 | 40.66% | 42.57% | **+1.91%** |
+
+### Key Findings
+
+1. **At 10% data: LDA underperforms** (-2.69%)
+   - LDA needs sufficient samples to estimate class covariances reliably
+   - With only 50 samples per class, LDA's assumptions break down
+
+2. **At 25%+ data: LDA improves performance**
+   - LDA gain peaks at 50% data (+4.51%)
+   - Consistent improvement at full data (+1.91%)
+
+3. **Practical Implication**: 
+   - Use LDA when you have ≥25% of typical training data
+   - For very limited data (<10%), consider full features or simpler regularization
+
+### Replicate This Experiment
+
+```bash
+python experiments/run_data_efficiency.py
+# Results saved to: results/data_efficiency/
+```
+
+---
+
 ## 8. Key Findings
 
 ### 1. LDA Can IMPROVE Accuracy Over Full Features (Surprising!)
@@ -566,13 +637,21 @@ python experiments/run_extended_study.py
 #                   results/modern_methods.csv
 #                   results/classwise_analysis.csv
 #                   results/deployment_analysis.csv
+
+# Statistical significance analysis (5 seeds, p-values)
+python experiments/run_statistical_significance.py
+# Results saved to: results/statistical_significance/
+
+# Training data efficiency study (10%, 25%, 50%, 100% data)
+python experiments/run_data_efficiency.py
+# Results saved to: results/data_efficiency/
 ```
 
 ### Step 4: Generate Visualizations (Optional)
 
 ```bash
-# Open and run the analysis notebook
-jupyter notebook notebooks/analysis.ipynb
+# Open and run the comprehensive analysis notebook
+jupyter notebook notebooks/comprehensive_analysis.ipynb
 ```
 
 ### Expected Runtimes

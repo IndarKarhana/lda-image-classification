@@ -154,6 +154,65 @@ def load_features(feature_dir):
     return X_train, X_test, y_train, y_test
 
 
+def get_or_extract_features(feature_dir='./features/saved'):
+    """
+    Get cached features or extract them if not available.
+    
+    Compatible with the Tiny ImageNet API for easy script reuse.
+    
+    Args:
+        feature_dir: Directory to load/save features
+    
+    Returns:
+        tuple: (X_train, y_train, X_test, y_test, feature_dim)
+    """
+    feature_dim = 512  # ResNet-18 feature dimension
+    
+    # Check if features already exist
+    if os.path.exists(os.path.join(feature_dir, 'X_train.npy')):
+        print(f"Loading cached features from {feature_dir}")
+        X_train, X_test, y_train, y_test = load_features(feature_dir)
+        return X_train, y_train, X_test, y_test, feature_dim
+    
+    # Features don't exist, need to extract
+    print("Features not found. Extracting features...")
+    
+    # Configuration
+    data_root = './data'
+    batch_size = 128
+    num_workers = 4
+    
+    # Setup
+    device = get_device()
+    print(f"Using device: {device}")
+    
+    # Load data
+    print("Loading CIFAR-100...")
+    train_dataset, test_dataset = load_cifar100(root=data_root)
+    train_loader, test_loader = get_dataloaders(
+        train_dataset, test_dataset,
+        batch_size=batch_size,
+        num_workers=num_workers
+    )
+    
+    # Create model
+    print("Loading ResNet-18 (frozen, ImageNet pretrained)...")
+    model = FeatureExtractor().to(device)
+    
+    # Extract features
+    print("Extracting training features...")
+    X_train, y_train = extract_features(train_loader, model, device)
+    
+    print("Extracting test features...")
+    X_test, y_test = extract_features(test_loader, model, device)
+    
+    # Save features
+    print("Saving features...")
+    save_features(feature_dir, X_train, X_test, y_train, y_test)
+    
+    return X_train, y_train, X_test, y_test, feature_dim
+
+
 def main():
     """
     Main function to extract and save features with timing.
