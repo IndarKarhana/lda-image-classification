@@ -726,11 +726,12 @@ lda-cifar100/
 If you use this code or findings, please cite:
 
 ```bibtex
-@misc{lda-cifar100-study,
-  title={LDA for CIFAR-100: A Study on Supervised Dimensionality Reduction},
-  author={Research Study},
+@misc{kumar2026lda,
+  title={LDA for Image Classification: A Study on Supervised Dimensionality Reduction},
+  author={Kumar, Indar},
   year={2026},
-  note={GitHub repository}
+  howpublished={\url{https://github.com/IndarKarhana/lda-image-classification}},
+  note={GitHub repository, MIT License}
 }
 ```
 
