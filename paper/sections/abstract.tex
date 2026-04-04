@@ -1,0 +1,11 @@
+\begin{abstract}
+Transfer learning with frozen pretrained convolutional neural networks (CNNs) has become standard practice for image classification when labeled data or computational budgets are limited. The dominant pipeline extracts high-dimensional feature vectors from a penultimate layer and feeds them directly to a linear classifier. We investigate a question that has received surprisingly little systematic attention in the literature: \emph{whether reducing the dimensionality of these features before classification improves downstream accuracy, and if so, which method should be preferred.}
+
+Through controlled experiments spanning four backbone architectures (ResNet-18, ResNet-50, MobileNetV3-Small, EfficientNet-B0), two datasets (CIFAR-100 and Tiny ImageNet), and ten dimensionality reduction strategies, we find that classical Linear Discriminant Analysis (LDA) consistently \emph{improves} classification accuracy over full-dimensional features---by up to 4.6 percentage points---while reducing feature dimensionality by 61--95\%. This improvement is statistically significant ($p < 0.001$, paired $t$-test, 5 seeds) across all eight backbone--dataset configurations. LDA outperforms unsupervised PCA in 7 of 8 settings and dominates more complex alternatives including Local Fisher Discriminant Analysis and Neighbourhood Components Analysis in both accuracy and computational cost. We further introduce two lightweight extensions---Residual Discriminant Augmentation (RDA) and Discriminant Subspace Boosting (DSB)---that yield an additional 0.2--0.4\% accuracy at the cost of doubled computation time, though standard LDA suffices in most practical scenarios.
+
+We derive concrete guidelines for practitioners: when to prefer LDA over PCA, how many components to retain, at what dataset sizes the crossover occurs, and which backbone--dataset combinations benefit most. Our results indicate that supervised dimensionality reduction has been undervalued in the transfer learning pipeline, and that a well-configured LDA projection step should be considered standard practice for frozen-feature classification.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Dimensionality reduction, linear discriminant analysis, transfer learning, image classification, frozen features, computational efficiency.
+\end{IEEEkeywords}

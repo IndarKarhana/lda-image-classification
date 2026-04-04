@@ -1,8 +1,0 @@
-{
-  "data_loading_sec": 8.895369791018311,
-  "model_loading_sec": 2.5768985410104506,
-  "train_extraction_sec": 51.97388512495672,
-  "test_extraction_sec": 31.1538671249873,
-  "saving_sec": 0.7797912090318277,
-  "total_sec": 95.45304875000147
-}

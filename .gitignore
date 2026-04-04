@@ -19,6 +19,7 @@ data/cifar-100-python.tar.gz
 data/*.npz
 data/tiny-imagenet-200/
 features/saved/*.npy
+features/saved/*.npz
 features/tiny_imagenet/*.npz
 
 # Keep results but ignore large feature caches
@@ -33,6 +34,36 @@ features/tiny_imagenet/*.npz
 # OS
 .DS_Store
 Thumbs.db
+.DS_Store?
 
 # Logs
 *.log
+
+# Copilot / AI instructions (workspace-specific, not needed in repo)
+.github/copilot-instructions.md
+.github/
+
+# Internal docs (development notes, not for public repo)
+docs/
+progress.md
+
+# Archive of old experiments (keep locally, don't ship)
+archive/
+
+# Paper build artifacts (PDF is regenerated from source)
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+paper/*.toc
+paper/figures/*.png
+
+# Duplicate git directory (cleanup artifact)
+.git 2/
+
+# Notebooks (large, contain outputs)
+notebooks/

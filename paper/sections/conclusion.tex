@@ -1,0 +1,16 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We have presented a comprehensive empirical study of dimensionality reduction applied to frozen CNN features for image classification, evaluating ten methods across four backbones and two datasets. The central finding is that Linear Discriminant Analysis---a technique dating to 1936---consistently improves classification accuracy over using full features, while reducing dimensionality by 80--95\% and cutting downstream classifier training time by 2--5$\times$.
+
+This result is not marginal. LDA outperforms full features in all eight backbone--dataset configurations, with gains of 0.3 to 4.6 percentage points that are statistically significant at $p < 0.001$ in every case. It also outperforms PCA in seven of eight configurations, confirming that supervised projection is genuinely valuable, not merely redundant with unsupervised variance selection.
+
+Among more sophisticated alternatives, only DSB---a boosting-inspired reweighting of the scatter matrices---provides a consistent (though small) improvement over LDA, and at 2--3$\times$ the computational cost. LFDA, NCA, and two-stage PCA+LDA all fail to improve on plain LDA for frozen CNN features. Regularized LDA matches standard LDA in most cases and provides modest gains on high-dimensional backbones.
+
+These findings carry immediate practical implications. For any transfer learning pipeline using frozen features, inserting an LDA projection step is straightforward with standard implementations (e.g., scikit-learn~\cite{sklearn}), adds negligible latency, and reliably improves accuracy. In no configuration in our study does this step degrade performance.
+
+\paragraph{Limitations.} Our study is bounded by its experimental scope: two image classification datasets (100 and 200 classes), four ImageNet-pretrained backbones, and a linear classifier. Whether LDA's advantage extends to tasks with thousands of classes, fine-tuned features, or non-linear classifiers remains open. LDA's upper bound of $C-1$ components may also be restrictive for tasks where $C$ is small relative to the intrinsic feature dimensionality. Additionally, our evaluation uses a single classification paradigm (logistic regression); nearest-neighbor or SVM classifiers might respond differently to reduced features.
+
+\paragraph{Future work.} Several directions follow naturally. First, extending the evaluation to larger-scale datasets (ImageNet-1K, iNaturalist) and to fine-grained classification where inter-class differences are subtle. Second, investigating whether LDA's benefit persists with non-linear classifiers such as small MLPs. Third, exploring LDA in continual and few-shot learning settings where dimensionality reduction could mitigate catastrophic forgetting or data scarcity. Finally, studying whether the LDA projection can be learned end-to-end as a differentiable layer within a frozen-backbone pipeline, bridging the gap between classical and deep metric learning.
+
+\paragraph{Reproducibility.} Code, data pipelines, and full experimental results are available at \url{https://github.com/IndarKarhana/lda-image-classification}.

@@ -1,0 +1,56 @@
+\documentclass[journal]{IEEEtran}
+
+% ---- Packages ----
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{subcaption}
+\usepackage{siunitx}
+\usepackage{balance}
+\usepackage{enumitem}
+
+% Column type for tables
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Math operators
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\rank}{rank}
+
+\begin{document}
+
+\title{Supervised Dimensionality Reduction Revisited:\\Why LDA on Frozen CNN Features Deserves a Second Look}
+
+\author{
+\IEEEauthorblockN{Indar Kumar, Girish Karhana, Sai Krishna Jasti, and Ankit Hemant Lade}
+\thanks{Manuscript submitted for review. I.~Kumar, G.~Karhana, S.~K.~Jasti, and A.~H.~Lade are independent researchers (e-mail: indarkarhana@gmail.com, girishkarhana8@gmail.com, jsaikrishna379@gmail.com, ankitlade12@gmail.com). Corresponding author: Indar Kumar.}
+}
+
+\maketitle
+
+\input{sections/abstract}
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/method}
+\input{sections/experiments}
+\input{sections/analysis}
+\input{sections/conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

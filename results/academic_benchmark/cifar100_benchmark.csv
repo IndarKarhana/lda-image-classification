@@ -1,0 +1,11 @@
+backbone,dataset,method,category,accuracy,dim,time_reduce,time_classify,time_total,n_classes,feature_dim
+resnet50,cifar100,Full,control,72.0,2048,0.0,4095.29,4095.29,100,2048
+resnet50,cifar100,PCA (99D),control,69.23,99,18.99,87.27,106.26,100,2048
+resnet50,cifar100,LDA (99D),classical,72.21,99,99.81,121.0,220.81,100,2048
+resnet50,cifar100,PCA+LDA (99D),classical,70.61,99,45.33,103.15,148.48,100,2048
+resnet50,cifar100,R-LDA (99D),classical,71.92,99,173.66,157.23,330.89,100,2048
+resnet50,cifar100,LFDA (99D),academic,68.25,99,26.42,82.03,108.46,100,2048
+resnet50,cifar100,NCA (99D),academic,69.59,99,672.22,93.43,765.66,100,2048
+resnet50,cifar100,RDA (99+30D),ours,72.66,129,123.05,434.9,557.95,100,2048
+resnet50,cifar100,"DSB (2 rounds, 99D)",ours,72.66,99,215.43,79.7,295.14,100,2048
+resnet50,cifar100,RDA+SMD (99+30D),ours,72.94,129,155.67,362.52,518.19,100,2048

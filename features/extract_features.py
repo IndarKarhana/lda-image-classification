@@ -64,7 +64,7 @@ class FeatureExtractor(nn.Module):
         Extract features from input images.
         
         Args:
-            x: Input tensor of shape (batch, 3, 32, 32)
+            x: Input tensor of shape (batch, 3, 224, 224) — resized for pretrained model
         
         Returns:
             Features of shape (batch, 512)

@@ -1,0 +1,30 @@
+\section{Introduction}
+\label{sec:introduction}
+
+The transfer learning paradigm has fundamentally changed how practitioners approach image classification. Rather than training a deep network from scratch on a target task, the standard recipe is to take a network pretrained on ImageNet~\cite{deng2009imagenet}, freeze its weights, extract feature vectors from a late layer, and train a lightweight classifier on top~\cite{donahue2014decaf, sharif2014cnn, kornblith2019better}. This frozen-feature approach is attractive when labeled data is scarce, when computational resources are limited, or when rapid iteration across many target tasks is needed.
+
+A frozen ResNet-18, for instance, produces 512-dimensional feature vectors; a ResNet-50 produces 2048-dimensional vectors. These vectors are then fed to a logistic regression or small MLP. What is rarely questioned is whether the \emph{full} feature vector is the right input to the downstream classifier. After all, these features were optimized for 1000-way ImageNet classification. When the target task has far fewer classes---100 in CIFAR-100, 200 in Tiny ImageNet---the features live in a space whose intrinsic dimensionality may be much lower than the ambient one.
+
+Dimensionality reduction before classification is one of the oldest ideas in pattern recognition. Principal Component Analysis (PCA)~\cite{pearson1901pca, jolliffe2002pca} finds directions of maximal variance; Linear Discriminant Analysis (LDA)~\cite{fisher1936lda, rao1948utilization} finds directions that maximize the ratio of between-class to within-class scatter. Both are textbook methods dating to the early twentieth century. Yet despite the extensive body of work on transfer learning, to the best of our knowledge no systematic empirical study has investigated whether applying LDA to frozen CNN features improves downstream classification.
+
+Our experiments demonstrate that the answer is affirmative, and the improvement is both consistent and practically significant. Across all eight combinations of four backbones and two datasets, LDA reduces feature dimensionality by 61--95\% and improves accuracy over the full-feature baseline by 0.3 to 4.6 percentage points ($p < 0.001$). To illustrate the magnitude: on MobileNetV3-Small with Tiny ImageNet, full features achieve 59.2\% accuracy in 576 dimensions; LDA achieves 63.3\% in 199 dimensions---a gain of 4.1 points with a 65\% reduction in dimensionality.
+
+The underlying mechanism is well understood in principle. LDA projects features onto the subspace that best separates the target classes, discarding feature dimensions that carry noise or information relevant to ImageNet but not to the target task. The result is an implicit form of regularization: the downstream classifier operates in a lower-dimensional, more discriminative space. This intuition dates to Fisher's original formulation~\cite{fisher1936lda}, but its empirical strength in the modern transfer learning setting---where features are extracted from networks trained on 1,000 categories and applied to far smaller target label sets---has not been systematically documented.
+
+\subsection{Contributions}
+
+This paper makes the following contributions:
+
+\begin{enumerate}[leftmargin=*]
+    \item We present a comprehensive empirical study of dimensionality reduction in the frozen-feature transfer learning pipeline, comparing ten methods across four CNN backbones and two datasets. To our knowledge, this is the most extensive controlled comparison of dimensionality reduction methods applied to frozen CNN features to date.
+
+    \item We establish that LDA \emph{improves} accuracy over full features in all eight backbone--dataset configurations tested, with statistical significance ($p < 0.001$). This finding challenges the implicit assumption that more dimensions are always better.
+
+    \item We benchmark LDA against published alternatives---Regularized LDA~\cite{friedman1989regularized}, Local Fisher Discriminant Analysis (LFDA)~\cite{sugiyama2007lfda}, and Neighbourhood Components Analysis (NCA)~\cite{goldberger2004nca}---and show that plain LDA achieves the best accuracy-to-cost ratio in the majority of configurations.
+
+    \item We introduce two lightweight extensions---Residual Discriminant Augmentation (RDA) and Discriminant Subspace Boosting (DSB)---and characterize the regimes where they offer marginal gains over standard LDA.
+
+    \item We derive practical guidelines covering backbone selection, the number of components to retain, training set size requirements, and the accuracy--speed tradeoff, aimed at practitioners who use frozen features in production or research.
+\end{enumerate}
+
+The rest of this paper is organized as follows. Section~\ref{sec:related_work} reviews related work on dimensionality reduction and transfer learning. Section~\ref{sec:method} formalizes the problem and describes the methods compared, including the two proposed extensions. Section~\ref{sec:experiments} presents the experimental setup and main results. Section~\ref{sec:analysis} provides deeper analysis including statistical testing, data efficiency, computational costs, and practitioner guidelines. Section~\ref{sec:conclusion} concludes.

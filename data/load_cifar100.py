@@ -11,34 +11,41 @@ from torchvision import transforms
 from torch.utils.data import DataLoader
 
 
-def get_transforms():
+def get_transforms(image_size: int = 224):
     """
-    Returns transforms for feature extraction.
-    ResNet-18 expects ImageNet normalization.
+    Returns transforms for feature extraction with ImageNet-pretrained models.
+
+    ImageNet-pretrained backbones expect 224×224 input.  CIFAR-100 images
+    (32×32) MUST be resized to produce high-quality features.
+
+    Args:
+        image_size: Target spatial size.  Default 224 (standard for ImageNet
+            pretrained models).
     """
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize(
-            mean=[0.485, 0.456, 0.406],  # ImageNet means
-            std=[0.229, 0.224, 0.225]    # ImageNet stds
-        )
-    ])
-    return transform
+    steps = []
+    steps.append(transforms.Resize(image_size))
+    steps.append(transforms.ToTensor())
+    steps.append(transforms.Normalize(
+        mean=[0.485, 0.456, 0.406],  # ImageNet means
+        std=[0.229, 0.224, 0.225]    # ImageNet stds
+    ))
+    return transforms.Compose(steps)
 
 
-def load_cifar100(root='./data', download=True):
+def load_cifar100(root='./data', download=True, image_size: int = 224):
     """
     Load CIFAR-100 train and test datasets.
     
     Args:
         root: Directory to store/load data
         download: Whether to download if not present
+        image_size: Target spatial size for transforms (default 224)
     
     Returns:
         train_dataset: Training set (50,000 images)
         test_dataset: Test set (10,000 images)
     """
-    transform = get_transforms()
+    transform = get_transforms(image_size=image_size)
     
     train_dataset = CIFAR100(
         root=root,
