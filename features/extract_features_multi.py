@@ -1,14 +1,16 @@
 """
 Multi-Backbone Feature Extraction
 ====================================
-Extracts frozen CNN features from multiple backbones for CIFAR-100
-and Tiny ImageNet. Features are cached to disk for reuse.
+Extracts frozen CNN/ViT features from multiple backbones for CIFAR-100,
+Tiny ImageNet, and CUB-200-2011. Features are cached to disk for reuse.
 
 Supported backbones:
   - ResNet-18 (512D)
   - ResNet-50 (2048D)
   - MobileNetV3-Small (576D)
   - EfficientNet-B0 (1280D)
+  - ViT-B/16 (768D) — Vision Transformer (Dosovitskiy et al., 2020)
+  - DINOv2 ViT-S/14 (384D) — Self-supervised ViT (Oquab et al., 2023)
 
 Author: Research Study
 """
@@ -59,6 +61,16 @@ BACKBONES: Dict[str, Dict] = {
             nn.Flatten(),
         ),
     },
+    "vit_b16": {
+        "model_fn": lambda: models.vit_b_16(weights=models.ViT_B_16_Weights.IMAGENET1K_V1),
+        "feature_dim": 768,
+        "remove_head": "vit",  # Special handling — uses CLS token, not Sequential
+    },
+    "dinov2_vits14": {
+        "model_fn": lambda: torch.hub.load("facebookresearch/dinov2", "dinov2_vits14"),
+        "feature_dim": 384,
+        "remove_head": "dinov2",  # Special handling — already a feature extractor
+    },
 }
 
 
@@ -106,7 +118,18 @@ def create_feature_extractor(backbone_name: str, device: torch.device) -> Tuple[
 
     config = BACKBONES[backbone_name]
     model = config["model_fn"]()
-    extractor = config["remove_head"](model)
+    remove_head = config["remove_head"]
+
+    if remove_head == "vit":
+        # ViT-B/16: wrap to extract CLS token from encoder output
+        extractor = _ViTFeatureExtractor(model)
+    elif remove_head == "dinov2":
+        # DINOv2: model already outputs CLS token features directly
+        extractor = model
+    else:
+        # CNN backbones: remove classification head
+        extractor = remove_head(model)
+
     extractor = extractor.to(device)
     extractor.eval()
 
@@ -115,6 +138,19 @@ def create_feature_extractor(backbone_name: str, device: torch.device) -> Tuple[
         param.requires_grad = False
 
     return extractor, config["feature_dim"]
+
+
+class _ViTFeatureExtractor(nn.Module):
+    """Wrapper for torchvision ViT to extract CLS token features."""
+
+    def __init__(self, vit_model: nn.Module):
+        super().__init__()
+        self.vit = vit_model
+        # Remove the classification head — we want the encoder output
+        self.vit.heads = nn.Identity()
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.vit(x)
 
 
 @torch.no_grad()
@@ -247,14 +283,71 @@ def get_or_extract_tiny_imagenet(
     return X_train, y_train, X_test, y_test, feature_dim
 
 
+def get_or_extract_cub200(
+    backbone_name: str,
+    cache_dir: str = "features/cub200",
+    batch_size: int = 64,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, int]:
+    """
+    Get (or extract and cache) features for CUB-200-2011.
+
+    Args:
+        backbone_name: Backbone key
+        cache_dir: Directory to cache features
+        batch_size: Extraction batch size (smaller default — CUB has variable-size images)
+
+    Returns:
+        X_train, y_train, X_test, y_test, feature_dim
+    """
+    os.makedirs(cache_dir, exist_ok=True)
+    cache_file = os.path.join(cache_dir, f"{backbone_name}_cub200.npz")
+
+    if os.path.exists(cache_file):
+        print(f"  Loading cached CUB-200 features: {cache_file}")
+        data = np.load(cache_file)
+        return data["X_train"], data["y_train"], data["X_test"], data["y_test"], int(data["dim"])
+
+    print(f"  Extracting CUB-200 features with {backbone_name}...")
+    from data.cub200 import CUB200
+
+    device = get_device()
+    model, feature_dim = create_feature_extractor(backbone_name, device)
+
+    # Resize to 224×224 — required for ImageNet-pretrained backbones.
+    # CUB-200 images have variable sizes, so Resize(256) + CenterCrop(224) is standard.
+    transform = transforms.Compose([
+        transforms.Resize(256),
+        transforms.CenterCrop(224),
+        transforms.ToTensor(),
+        transforms.Normalize(
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225],
+        ),
+    ])
+
+    train_dataset = CUB200(root="data", train=True, transform=transform, download=True)
+    test_dataset = CUB200(root="data", train=False, transform=transform, download=True)
+
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+
+    X_train, y_train = extract_features(model, train_loader, device, desc=f"CUB-200 train ({backbone_name})")
+    X_test, y_test = extract_features(model, test_loader, device, desc=f"CUB-200 test ({backbone_name})")
+
+    print(f"  Caching to {cache_file} (train: {X_train.shape}, test: {X_test.shape})")
+    np.savez_compressed(cache_file, X_train=X_train, y_train=y_train, X_test=X_test, y_test=y_test, dim=feature_dim)
+
+    return X_train, y_train, X_test, y_test, feature_dim
+
+
 if __name__ == "__main__":
     """Extract and cache features for all backbones × datasets."""
     import argparse
 
-    parser = argparse.ArgumentParser(description="Extract and cache CNN features")
+    parser = argparse.ArgumentParser(description="Extract and cache CNN/ViT features")
     parser.add_argument("--backbones", nargs="+", default=list(BACKBONES.keys()),
                         help="Backbones to extract")
-    parser.add_argument("--datasets", nargs="+", default=["cifar100", "tiny_imagenet"],
+    parser.add_argument("--datasets", nargs="+", default=["cifar100", "tiny_imagenet", "cub200"],
                         help="Datasets to extract")
     parser.add_argument("--batch-size", type=int, default=128)
     args = parser.parse_args()
@@ -273,6 +366,10 @@ if __name__ == "__main__":
             elif dataset == "tiny_imagenet":
                 X_train, y_train, X_test, y_test, dim = get_or_extract_tiny_imagenet(
                     backbone, batch_size=args.batch_size
+                )
+            elif dataset == "cub200":
+                X_train, y_train, X_test, y_test, dim = get_or_extract_cub200(
+                    backbone, batch_size=min(args.batch_size, 64)
                 )
             else:
                 print(f"  Unknown dataset: {dataset}, skipping")

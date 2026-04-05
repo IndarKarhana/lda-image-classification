@@ -1,0 +1,9 @@
+backbone,dataset,method,classifier,accuracy_mean,accuracy_std,dim,time_reduce,time_classify,time_total,n_seeds
+resnet50,cifar100,Full,LogReg,71.98,0.0,2048,0.0,43.85,43.85,5
+resnet50,cifar100,Full,MLP,72.13,0.31,2048,0.0,14.61,14.61,5
+resnet50,cifar100,PCA,LogReg,69.29,0.0,99,10.96,4.31,15.26,5
+resnet50,cifar100,PCA,MLP,68.46,0.24,99,10.96,4.65,15.61,5
+resnet50,cifar100,LDA,LogReg,72.21,0.0,99,17.27,4.29,21.56,5
+resnet50,cifar100,LDA,MLP,72.0,0.19,99,17.27,3.73,21.0,5
+resnet50,cifar100,R-LDA,LogReg,71.92,0.0,99,30.28,5.4,35.68,5
+resnet50,cifar100,R-LDA,MLP,71.37,0.21,99,30.28,5.22,35.5,5
