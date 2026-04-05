@@ -1,56 +1,43 @@
-# Virtual environment
-venv/
-.venv/
-env/
+# ═══════════════════════════════════════════════════════════════
+# .gitignore — LDA Image Classification Research Project
+# ═══════════════════════════════════════════════════════════════
+# Only active code, results CSVs, paper source, and config are tracked.
+# Everything else is generated, cached, or archived locally.
 
-# Python cache
+# ── Python ──
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
 
-# Jupyter Notebook checkpoints
-.ipynb_checkpoints/
+# ── Virtual Environments ──
+venv/
+.venv/
+env/
+.env/
 
-# Large data files (can be regenerated)
+# ── Datasets (large, auto-downloaded) ──
 data/cifar-100-python/
 data/cifar-100-python.tar.gz
-data/*.npz
 data/tiny-imagenet-200/
-features/saved/*.npy
-features/saved/*.npz
-features/tiny_imagenet/*.npz
+data/CUB_200_2011/
+data/CUB_200_2011.tgz
+data/*.npz
 
-# Keep results but ignore large feature caches
-# results/ is tracked
+# ── Cached Features (large .npz/.npy files, regenerated) ──
+features/saved/
+features/tiny_imagenet/
+features/cub200/
 
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-.DS_Store?
-
-# Logs
-*.log
-
-# Copilot / AI instructions (workspace-specific, not needed in repo)
-.github/copilot-instructions.md
-.github/
-
-# Internal docs (development notes, not for public repo)
-docs/
-progress.md
-
-# Archive of old experiments (keep locally, don't ship)
+# ── Archive (deprecated code, kept locally only) ──
 archive/
 
-# Paper build artifacts (PDF is regenerated from source)
+# ── ArXiv Submission (build artifact, regenerate from paper/) ──
+arxiv_submission/
+arxiv_submission.zip
+
+# ── Paper Build Artifacts (regenerated via pdflatex) ──
 paper/*.aux
 paper/*.bbl
 paper/*.blg
@@ -60,10 +47,31 @@ paper/*.fls
 paper/*.fdb_latexmk
 paper/*.synctex.gz
 paper/*.toc
+paper/main.pdf
 paper/figures/*.png
 
-# Duplicate git directory (cleanup artifact)
+# ── Logs ──
+*.log
+*_log.txt
+
+# ── IDE / Editor ──
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+
+# ── Jupyter ──
+.ipynb_checkpoints/
+
+# ── Git Artifacts ──
 .git 2/
 
-# Notebooks (large, contain outputs)
-notebooks/
+# ── Workspace-specific (not for public repo) ──
+.github/
+docs/
+progress.md

@@ -1,9 +1,0 @@
-method,accuracy,dim,time,notes
-DG-LDA [regularized] (99D),66.91,99,13.291557833028492,"n_comp=99, α=0.0034"
-Vanilla LDA (99D),66.9,99,5.938230625004508,StandardScaler → sklearn LDA → LogReg
-DG-LDA [ablation_vanilla] (99D),66.9,99,12.57584066700656,"n_comp=99, α=0.0000"
-DG-LDA [cw_only] (99D),66.88,99,15.281595958047546,"n_comp=99, α=0.0000"
-DG-LDA [full] (68D),65.32,68,18.884688916034065,"n_comp=68, α=0.0034"
-PCA (99D),64.94,99,11.53077558404766,StandardScaler → PCA → LogReg
-Full Features raw (512D),64.41,512,81.41330458404263,No scaling + LogReg
-Full Features (512D),62.88,512,22.908196709002368,StandardScaler + LogReg
