@@ -26,12 +26,10 @@ set -euo pipefail
 # ── Configuration ──
 VM_NAME="lda-extended"
 ZONE="us-central1-a"
-MACHINE_TYPE="n2-standard-16"      # 16 vCPUs, 64GB RAM (need RAM for DINOv2 + large features)
-GPU_TYPE="nvidia-tesla-t4"
-GPU_COUNT=1
+MACHINE_TYPE="n2-standard-32"      # 32 vCPUs, 128GB RAM (CPU-only, proven from Phase 2/3)
 DISK_SIZE="200GB"                  # CUB-200 ~1.1GB, ImageNet features are large
-IMAGE_FAMILY="pytorch-latest-gpu"
-IMAGE_PROJECT="deeplearning-platform-release"
+IMAGE_FAMILY="ubuntu-2204-lts"
+IMAGE_PROJECT="ubuntu-os-cloud"
 
 REPO_URL="https://github.com/IndarKarhana/lda-image-classification.git"
 REMOTE_DIR="/home/\$USER/lda-image-classification"
@@ -53,17 +51,14 @@ create)
     gcloud compute instances create "$VM_NAME" \
         --zone="$ZONE" \
         --machine-type="$MACHINE_TYPE" \
-        --accelerator="type=$GPU_TYPE,count=$GPU_COUNT" \
         --boot-disk-size="$DISK_SIZE" \
         --image-family="$IMAGE_FAMILY" \
         --image-project="$IMAGE_PROJECT" \
-        --maintenance-policy=TERMINATE \
-        --metadata="install-nvidia-driver=True" \
         --scopes="default,storage-rw"
     
     echo ""
-    echo "VM created. Waiting 90s for boot + GPU driver..."
-    sleep 90
+    echo "VM created. Waiting 60s for boot..."
+    sleep 60
     
     echo "═══ Setting up environment ═══"
     gcloud compute ssh "$VM_NAME" --zone="$ZONE" --command="
@@ -75,17 +70,18 @@ create)
         python3 -m venv .venv
         source .venv/bin/activate
         
-        # Install dependencies
+        # Install dependencies (CPU-only PyTorch — no GPU quota on this project)
         pip install --upgrade pip
-        pip install torch torchvision numpy pandas scikit-learn scipy matplotlib seaborn tqdm
+        pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+        pip install numpy pandas scikit-learn scipy matplotlib seaborn tqdm
         
-        # Verify GPU
+        # Verify setup
         python -c '
-import torch
-print(f\"CUDA available: {torch.cuda.is_available()}\")
-if torch.cuda.is_available():
-    print(f\"GPU: {torch.cuda.get_device_name(0)}\")
-    print(f\"GPU Memory: {torch.cuda.get_device_properties(0).total_mem / 1e9:.1f} GB\")
+import torch, torchvision, sklearn, numpy, pandas
+print(f\"PyTorch: {torch.__version__} (CPU)\")
+print(f\"torchvision: {torchvision.__version__}\")
+print(f\"sklearn: {sklearn.__version__}\")
+print(f\"Cores: {torch.get_num_threads()}\")
 '
         echo ''
         echo '═══ Setup complete ═══'
@@ -250,8 +246,8 @@ status)
     echo "═══ Checking VM status ═══"
     gcloud compute instances describe "$VM_NAME" --zone="$ZONE" --format="table(name,status,machineType,zone)"
     echo ""
-    echo "═══ GPU utilization ═══"
-    gcloud compute ssh "$VM_NAME" --zone="$ZONE" --command="nvidia-smi" 2>/dev/null || echo "Cannot connect to VM"
+    echo "═══ Checking running processes ═══"
+    gcloud compute ssh "$VM_NAME" --zone="$ZONE" --command="ps aux | grep python | grep -v grep; echo ''; uptime; echo ''; df -h /" 2>/dev/null || echo "Cannot connect to VM"
     ;;
 
 cleanup)

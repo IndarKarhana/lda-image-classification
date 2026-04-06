@@ -221,8 +221,8 @@ def get_or_extract_cifar100(
 
     train_dataset = CIFAR100(root="data", train=True, download=True, transform=transform)
     test_dataset = CIFAR100(root="data", train=False, download=True, transform=transform)
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
 
     X_train, y_train = extract_features(model, train_loader, device, desc=f"CIFAR-100 train ({backbone_name})")
     X_test, y_test = extract_features(model, test_loader, device, desc=f"CIFAR-100 test ({backbone_name})")
@@ -271,8 +271,8 @@ def get_or_extract_tiny_imagenet(
     train_dataset = TinyImageNet(root=data_root, train=True, transform=transform, download=True)
     test_dataset = TinyImageNet(root=data_root, train=False, transform=transform, download=True)
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
 
     X_train, y_train = extract_features(model, train_loader, device, desc=f"TinyIN train ({backbone_name})")
     X_test, y_test = extract_features(model, test_loader, device, desc=f"TinyIN test ({backbone_name})")
@@ -328,8 +328,8 @@ def get_or_extract_cub200(
     train_dataset = CUB200(root="data", train=True, transform=transform, download=True)
     test_dataset = CUB200(root="data", train=False, transform=transform, download=True)
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
 
     X_train, y_train = extract_features(model, train_loader, device, desc=f"CUB-200 train ({backbone_name})")
     X_test, y_test = extract_features(model, test_loader, device, desc=f"CUB-200 test ({backbone_name})")

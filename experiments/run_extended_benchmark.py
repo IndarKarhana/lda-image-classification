@@ -643,8 +643,9 @@ def main():
             df = run_config(bb, ds, clf_names, seeds)
             all_dfs.append(df)
 
-            # Save incrementally (crash-safe)
-            csv_path = os.path.join(args.output_dir, f"{bb}_{ds}.csv")
+            # Save incrementally (crash-safe), include classifier in filename
+            clf_tag = "_".join(c.lower() for c in clf_names)
+            csv_path = os.path.join(args.output_dir, f"{bb}_{ds}_{clf_tag}.csv")
             df.to_csv(csv_path, index=False)
             print(f"  📄 Saved: {csv_path}")
 
