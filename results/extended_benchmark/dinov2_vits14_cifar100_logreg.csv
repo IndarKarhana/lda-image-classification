@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+dinov2_vits14,cifar100,Full,control,LogReg,80.72,0.0,384,384,100,99,0.0,504.98,504.98,5,OK
+dinov2_vits14,cifar100,PCA,control,LogReg,80.6,0.0,99,384,100,99,3.12,38.88,42.0,5,OK
+dinov2_vits14,cifar100,LDA,classical,LogReg,82.37,0.0,99,384,100,99,12.02,27.75,39.77,5,OK
+dinov2_vits14,cifar100,PCA+LDA,classical,LogReg,82.41,0.0,99,384,100,99,17.11,25.12,42.23,5,OK
+dinov2_vits14,cifar100,R-LDA,classical,LogReg,82.25,0.0,99,384,100,99,5.88,23.3,29.18,5,OK
+dinov2_vits14,cifar100,LFDA,academic,LogReg,81.05,0.0,99,384,100,99,16.55,23.15,39.7,5,OK
+dinov2_vits14,cifar100,NCA,academic,LogReg,81.26,0.0,99,384,100,99,515.85,24.94,540.79,5,OK
+dinov2_vits14,cifar100,RDA,ours,LogReg,82.11,0.0,119,384,100,99,19.74,69.41,89.16,5,OK
+dinov2_vits14,cifar100,DSB,ours,LogReg,82.41,0.0,99,384,100,99,90.79,22.48,113.26,5,OK
+dinov2_vits14,cifar100,RDA+SMD,ours,LogReg,82.21,0.0,119,384,100,99,25.62,58.4,84.02,5,OK

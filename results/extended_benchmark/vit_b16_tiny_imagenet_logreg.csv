@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+vit_b16,tiny_imagenet,Full,control,LogReg,81.58,0.0,768,768,200,199,0.0,535.94,535.94,5,OK
+vit_b16,tiny_imagenet,PCA,control,LogReg,80.68,0.0,199,768,200,199,8.14,124.04,132.17,5,OK
+vit_b16,tiny_imagenet,LDA,classical,LogReg,81.66,0.0,199,768,200,199,52.12,113.58,165.7,5,OK
+vit_b16,tiny_imagenet,PCA+LDA,classical,LogReg,81.66,0.0,199,768,200,199,92.13,153.19,245.32,5,OK
+vit_b16,tiny_imagenet,R-LDA,classical,LogReg,81.54,0.0,199,768,200,199,28.27,77.9,106.17,5,OK
+vit_b16,tiny_imagenet,LFDA,academic,LogReg,81.09,0.0,199,768,200,199,17.85,73.87,91.72,5,OK
+vit_b16,tiny_imagenet,NCA,academic,LogReg,80.93,0.0,199,768,200,199,313.04,83.78,396.82,5,OK
+vit_b16,tiny_imagenet,RDA,ours,LogReg,81.53,0.0,224,768,200,199,19.1,84.81,103.9,5,OK
+vit_b16,tiny_imagenet,DSB,ours,LogReg,81.67,0.0,199,768,200,199,155.6,74.95,230.55,5,OK
+vit_b16,tiny_imagenet,RDA+SMD,ours,LogReg,81.47,0.0,224,768,200,199,73.39,103.68,177.07,5,OK

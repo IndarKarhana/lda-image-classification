@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+resnet18,tiny_imagenet,Full,control,LogReg,59.82,0.0,512,512,200,199,0.0,1461.96,1461.96,5,OK
+resnet18,tiny_imagenet,PCA,control,LogReg,64.5,0.0,199,512,200,199,5.12,72.05,77.17,5,OK
+resnet18,tiny_imagenet,LDA,classical,LogReg,64.28,0.0,199,512,200,199,20.92,63.8,84.73,5,OK
+resnet18,tiny_imagenet,PCA+LDA,classical,LogReg,64.47,0.0,199,512,200,199,22.51,50.77,73.28,5,OK
+resnet18,tiny_imagenet,R-LDA,classical,LogReg,64.77,0.0,199,512,200,199,6.42,49.78,56.2,5,OK
+resnet18,tiny_imagenet,LFDA,academic,LogReg,64.11,0.0,199,512,200,199,16.52,60.84,77.37,5,OK
+resnet18,tiny_imagenet,NCA,academic,LogReg,64.66,0.0,199,512,200,199,253.12,80.35,333.47,5,OK
+resnet18,tiny_imagenet,RDA,ours,LogReg,64.37,0.0,219,512,200,199,9.27,80.91,90.18,5,OK
+resnet18,tiny_imagenet,DSB,ours,LogReg,64.78,0.0,199,512,200,199,84.83,51.64,136.47,5,OK
+resnet18,tiny_imagenet,RDA+SMD,ours,LogReg,64.44,0.0,219,512,200,199,35.57,67.36,102.93,5,OK

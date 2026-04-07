@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+mobilenetv3,cifar100,Full,control,LogReg,65.69,0.0,576,576,100,99,0.0,862.1,862.1,5,OK
+mobilenetv3,cifar100,PCA,control,LogReg,64.62,0.0,99,576,100,99,6.8,24.46,31.26,5,OK
+mobilenetv3,cifar100,LDA,classical,LogReg,68.51,0.0,99,576,100,99,34.86,27.83,62.69,5,OK
+mobilenetv3,cifar100,PCA+LDA,classical,LogReg,67.96,0.0,99,576,100,99,31.73,27.32,59.05,5,OK
+mobilenetv3,cifar100,R-LDA,classical,LogReg,67.93,0.0,99,576,100,99,15.58,30.22,45.81,5,OK
+mobilenetv3,cifar100,LFDA,academic,LogReg,64.85,0.0,99,576,100,99,21.25,27.99,49.25,5,OK
+mobilenetv3,cifar100,NCA,academic,LogReg,65.26,0.0,99,576,100,99,632.77,36.04,668.82,5,OK
+mobilenetv3,cifar100,RDA,ours,LogReg,68.65,0.0,119,576,100,99,52.48,63.07,115.55,5,OK
+mobilenetv3,cifar100,DSB,ours,LogReg,68.94,0.0,99,576,100,99,75.71,30.8,106.5,5,OK
+mobilenetv3,cifar100,RDA+SMD,ours,LogReg,68.71,0.0,119,576,100,99,68.94,52.43,121.37,5,OK

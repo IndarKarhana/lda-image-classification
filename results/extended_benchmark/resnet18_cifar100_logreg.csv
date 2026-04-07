@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+resnet18,cifar100,Full,control,LogReg,62.85,0.0,512,512,100,99,0.0,898.87,898.87,5,OK
+resnet18,cifar100,PCA,control,LogReg,65.07,0.0,99,512,100,99,5.2,28.63,33.83,5,OK
+resnet18,cifar100,LDA,classical,LogReg,66.97,0.0,99,512,100,99,30.15,22.75,52.9,5,OK
+resnet18,cifar100,PCA+LDA,classical,LogReg,66.63,0.0,99,512,100,99,38.84,23.94,62.78,5,OK
+resnet18,cifar100,R-LDA,classical,LogReg,66.68,0.0,99,512,100,99,16.4,28.7,45.1,5,OK
+resnet18,cifar100,LFDA,academic,LogReg,65.25,0.0,99,512,100,99,33.31,37.09,70.4,5,OK
+resnet18,cifar100,NCA,academic,LogReg,65.06,0.0,99,512,100,99,705.02,33.08,738.09,5,OK
+resnet18,cifar100,RDA,ours,LogReg,66.8,0.0,119,512,100,99,44.28,89.33,133.61,5,OK
+resnet18,cifar100,DSB,ours,LogReg,67.2,0.0,99,512,100,99,74.07,25.66,99.74,5,OK
+resnet18,cifar100,RDA+SMD,ours,LogReg,66.64,0.0,119,512,100,99,63.33,77.89,141.22,5,OK

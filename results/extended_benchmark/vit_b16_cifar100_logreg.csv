@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+vit_b16,cifar100,Full,control,LogReg,78.81,0.0,768,768,100,99,0.0,419.88,419.88,5,OK
+vit_b16,cifar100,PCA,control,LogReg,76.66,0.0,99,768,100,99,12.81,44.55,57.36,5,OK
+vit_b16,cifar100,LDA,classical,LogReg,78.79,0.0,99,768,100,99,104.32,35.5,139.82,5,OK
+vit_b16,cifar100,PCA+LDA,classical,LogReg,78.79,0.0,99,768,100,99,31.26,31.89,63.14,5,OK
+vit_b16,cifar100,R-LDA,classical,LogReg,78.85,0.0,99,768,100,99,19.48,30.14,49.62,5,OK
+vit_b16,cifar100,LFDA,academic,LogReg,77.34,0.0,99,768,100,99,21.6,33.68,55.28,5,OK
+vit_b16,cifar100,NCA,academic,LogReg,77.64,0.0,99,768,100,99,517.17,31.98,549.15,5,OK
+vit_b16,cifar100,RDA,ours,LogReg,79.31,0.0,124,768,100,99,45.96,96.81,142.78,5,OK
+vit_b16,cifar100,DSB,ours,LogReg,79.06,0.0,99,768,100,99,96.45,32.09,128.54,5,OK
+vit_b16,cifar100,RDA+SMD,ours,LogReg,79.36,0.0,124,768,100,99,98.53,52.69,151.22,5,OK

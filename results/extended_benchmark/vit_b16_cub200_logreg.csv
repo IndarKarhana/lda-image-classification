@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+vit_b16,cub200,Full,control,LogReg,75.72,0.0,768,768,200,199,0.0,60.88,60.88,5,OK
+vit_b16,cub200,PCA,control,LogReg,72.01,0.0,199,768,200,199,29.24,27.61,56.85,5,OK
+vit_b16,cub200,LDA,classical,LogReg,73.61,0.0,199,768,200,199,52.32,20.14,72.46,5,OK
+vit_b16,cub200,PCA+LDA,classical,LogReg,73.46,0.0,199,768,200,199,96.12,19.89,116.01,5,OK
+vit_b16,cub200,R-LDA,classical,LogReg,73.33,0.0,199,768,200,199,39.11,23.12,62.24,5,OK
+vit_b16,cub200,LFDA,academic,LogReg,72.71,0.0,199,768,200,199,42.91,29.46,72.37,5,OK
+vit_b16,cub200,NCA,academic,LogReg,71.9,0.0,199,768,200,199,549.49,28.0,577.5,5,OK
+vit_b16,cub200,RDA,ours,LogReg,74.18,0.0,224,768,200,199,44.72,18.11,62.83,5,OK
+vit_b16,cub200,DSB,ours,LogReg,74.28,0.0,199,768,200,199,94.16,14.82,108.98,5,OK
+vit_b16,cub200,RDA+SMD,ours,LogReg,74.51,0.0,224,768,200,199,209.63,17.68,227.32,5,OK

@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+mobilenetv3,tiny_imagenet,Full,control,LogReg,59.46,0.0,576,576,200,199,0.0,1236.74,1236.74,5,OK
+mobilenetv3,tiny_imagenet,PCA,control,LogReg,61.94,0.0,199,576,200,199,4.01,109.66,113.67,5,OK
+mobilenetv3,tiny_imagenet,LDA,classical,LogReg,63.34,0.0,199,576,200,199,31.87,62.84,94.71,5,OK
+mobilenetv3,tiny_imagenet,PCA+LDA,classical,LogReg,63.33,0.0,199,576,200,199,12.36,58.1,70.45,5,OK
+mobilenetv3,tiny_imagenet,R-LDA,classical,LogReg,62.87,0.0,199,576,200,199,8.14,59.63,67.77,5,OK
+mobilenetv3,tiny_imagenet,LFDA,academic,LogReg,62.59,0.0,199,576,200,199,16.23,55.41,71.65,5,OK
+mobilenetv3,tiny_imagenet,NCA,academic,LogReg,61.81,0.0,199,576,200,199,290.31,84.04,374.35,5,OK
+mobilenetv3,tiny_imagenet,RDA,ours,LogReg,63.5,0.0,219,576,200,199,15.25,64.15,79.4,5,OK
+mobilenetv3,tiny_imagenet,DSB,ours,LogReg,63.84,0.0,199,576,200,199,90.38,36.01,126.39,5,OK
+mobilenetv3,tiny_imagenet,RDA+SMD,ours,LogReg,63.41,0.0,219,576,200,199,38.85,45.13,83.98,5,OK

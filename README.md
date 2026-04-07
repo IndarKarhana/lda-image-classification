@@ -1,12 +1,14 @@
 # Supervised Dimensionality Reduction Revisited: Why LDA on Frozen CNN Features Deserves a Second Look
 
+[![arXiv](https://img.shields.io/badge/arXiv-2604.03928-b31b1b.svg)](https://arxiv.org/abs/2604.03928)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
-[![Paper: IEEE TNNLS](https://img.shields.io/badge/Paper-IEEE%20TNNLS-green.svg)](paper/)
+
+📄 **Paper:** [arXiv:2604.03928](https://arxiv.org/abs/2604.03928)
 
 > **Indar Kumar, Girish Karhana, Sai Krishna Jasti, Ankit Hemant Lade**
 >
-> We investigate whether reducing the dimensionality of frozen CNN features before classification improves downstream accuracy. Through controlled experiments spanning 4 backbones, 2 datasets, and 10 methods, we find that classical LDA consistently **improves** accuracy over full features by up to 4.6 percentage points while reducing dimensionality by 61–95%.
+> We investigate whether reducing the dimensionality of frozen pretrained features before classification improves downstream accuracy. Through 180 controlled experiments spanning **6 backbones** (4 CNNs + 2 vision transformers), **3 datasets** (CIFAR-100, Tiny ImageNet, CUB-200), and **10 methods**, we find that classical LDA consistently **improves** accuracy on coarse-grained tasks by up to 4.5 percentage points — but **loses** on fine-grained CUB-200, establishing a clear boundary condition.
 
 ---
 
@@ -14,12 +16,13 @@
 
 | Finding | Evidence |
 |---------|----------|
-| **LDA beats full features in 8/8 configs** | +0.26% to +4.58%, all p < 0.001 |
-| **LDA beats PCA in 7/8 configs** | Supervised signal provides +1.9 to +3.9% lift |
-| **LDA beats LFDA, NCA in 8/8 configs** | Simpler method wins; 3–25× faster |
-| **Full features are never Pareto-optimal** | Slower *and* less accurate than LDA |
-| **DSB (ours) wins 4/8 configs** | +0.2–0.4% over LDA at 2–3× cost |
-| **Results generalize to Tiny ImageNet** | Consistent across 100- and 200-class tasks |
+| **LDA beats full features on 11/12 coarse-grained configs** | +0.08% to +4.46%, all p < 0.001 |
+| **Fine-grained boundary condition** | LDA loses on all 6 CUB-200 configs (−2.1% to −7.1%) |
+| **LDA beats PCA in 10/12 coarse-grained configs** | Supervised signal provides +0.3 to +3.9% lift |
+| **Full features are never Pareto-optimal (coarse)** | Slower *and* less accurate than LDA |
+| **DSB (ours) wins 6/18 configs outright** | +0.2–0.5% over LDA at 2–3× cost |
+| **DINOv2 at 384D beats all other backbones** | 87.73% on CUB-200 despite lowest dimensionality |
+| **8.4× average speedup** | CIFAR-100 avg across 6 backbones |
 
 ---
 
@@ -44,19 +47,22 @@
 
 ### Backbones (frozen, ImageNet-pretrained)
 
-| Backbone | Feature Dim | Role |
+| Backbone | Feature Dim | Type |
 |----------|------------|------|
-| ResNet-18 | 512 | Compact residual baseline |
-| ResNet-50 | 2048 | High-dimensional test |
-| MobileNetV3-Small | 576 | Edge deployment |
-| EfficientNet-B0 | 1280 | Modern efficient |
+| ResNet-18 | 512 | CNN |
+| ResNet-50 | 2048 | CNN |
+| MobileNetV3-Small | 576 | CNN |
+| EfficientNet-B0 | 1280 | CNN |
+| ViT-B/16 | 768 | Transformer (supervised) |
+| DINOv2 ViT-S/14 | 384 | Transformer (self-supervised) |
 
 ### Datasets
 
-| Dataset | Classes | Train | Test | Max LDA Dim (C−1) |
-|---------|---------|-------|------|--------------------|
-| CIFAR-100 | 100 | 50,000 | 10,000 | 99 |
-| Tiny ImageNet | 200 | 100,000 | 10,000 | 199 |
+| Dataset | Classes | Train | Test | Task Type |
+|---------|---------|-------|------|-----------|
+| CIFAR-100 | 100 | 50,000 | 10,000 | Coarse-grained |
+| Tiny ImageNet | 200 | 100,000 | 10,000 | Coarse-grained |
+| CUB-200-2011 | 200 | 5,994 | 5,794 | Fine-grained (birds) |
 
 ### Classifier
 
@@ -64,27 +70,36 @@ L2-regularized logistic regression (LBFGS, max_iter=5000, C=1.0) with StandardSc
 
 ---
 
-## Results (5-seed means ± std)
+## Results (Selected — 5-seed means)
 
-### CIFAR-100
+### CIFAR-100 (LDA helps ✅)
 
-| Method | ResNet-18 (512D) | ResNet-50 (2048D) | MobileNetV3 (576D) | EfficientNet (1280D) |
-|--------|-----------------|-------------------|--------------------|-----------------------|
-| Full | 62.85±.02 | 71.98±.00 | 65.58±.07 | 71.41±.04 |
-| PCA | 65.06±.01 | 69.18±.12 | 64.61±.01 | 69.77±.13 |
-| **LDA** | **66.97±.00** | 72.24±.05 | 68.47±.03 | 72.30±.04 |
-| DSB | **67.27±.00** | 72.62±.06 | **68.88±.04** | **72.55±.00** |
+| Method | R18 (512D) | R50 (2048D) | MV3 (576D) | EB0 (1280D) | ViT (768D) | DiNO (384D) |
+|--------|-----------|------------|-----------|------------|-----------|------------|
+| Full | 62.85 | 72.06 | 65.69 | 71.58 | 78.81 | 80.72 |
+| PCA | 65.07 | 69.14 | 64.65 | 69.77 | 78.05 | 81.55 |
+| **LDA** | **66.97** | 72.29 | 68.51 | 72.30 | 78.79 | 82.37 |
+| DSB | 67.20 | 72.52 | **68.94** | **72.63** | 79.10 | **82.41** |
 
-### Tiny ImageNet
+### Tiny ImageNet (LDA helps ✅)
 
-| Method | ResNet-18 (512D) | ResNet-50 (2048D) | MobileNetV3 (576D) | EfficientNet (1280D) |
-|--------|-----------------|-------------------|--------------------|-----------------------|
-| Full | 59.84±.04 | 74.29±.00 | 59.24±.06 | 71.79±.00 |
-| PCA | 64.46±.02 | 73.35±.08 | 61.95±.04 | 71.99±.17 |
-| **LDA** | 64.42±.06 | 75.01±.01 | 63.35±.01 | 72.34±.06 |
-| DSB | **64.70±.00** | 75.24±.06 | **63.73±.00** | 72.14±.06 |
+| Method | R18 (512D) | R50 (2048D) | MV3 (576D) | EB0 (1280D) | ViT (768D) | DiNO (384D) |
+|--------|-----------|------------|-----------|------------|-----------|------------|
+| Full | 59.82 | 74.13 | 59.46 | 71.67 | 81.58 | 78.25 |
+| PCA | 64.32 | 73.32 | 61.94 | 71.97 | 81.44 | **79.83** |
+| **LDA** | 64.28 | 74.98 | 63.34 | 72.32 | 81.66 | 79.67 |
+| DSB | **64.78** | 75.18 | **63.84** | 72.12 | **81.67** | 79.54 |
 
-Full 10-method tables with timing are in the paper (Tables I and II).
+### CUB-200 (LDA hurts ❌ — boundary condition)
+
+| Method | R18 (512D) | R50 (2048D) | MV3 (576D) | EB0 (1280D) | ViT (768D) | DiNO (384D) |
+|--------|-----------|------------|-----------|------------|-----------|------------|
+| **Full** | **62.89** | **64.46** | **63.01** | **78.05** | **75.72** | **87.73** |
+| PCA | 55.16 | 56.93 | 56.27 | 74.06 | 73.47 | 85.80 |
+| LDA | 57.73 | 57.32 | 59.30 | 75.32 | 73.61 | 85.61 |
+| Best reduced | 59.39 | 61.06 | 60.75 | 76.82 | 74.51 | 86.30 |
+
+Full 10-method tables with timing are in the paper (Tables I–III).
 
 ---
 
@@ -125,7 +140,7 @@ lda-image-classification/
 │   ├── main.tex
 │   ├── references.bib
 │   ├── sections/                     # 7 section files
-│   └── figures/                      # 4 publication figures (PDF + PNG)
+│   └── figures/                      # 5 publication figures (PDF + PNG)
 ├── results/
 │   ├── academic_benchmark/           # Phase 2: 80 single-seed results
 │   ├── phase3/                       # Multi-seed, significance, data efficiency, cost
@@ -177,10 +192,11 @@ pdflatex main && bibtex main && pdflatex main && pdflatex main
 
 ## Statistical Rigor
 
-- **5 random seeds** for multi-seed methods; single-seed methods marked with † in tables
+- **180 experiments** (6 backbones × 3 datasets × 10 methods) with 5-seed averaging
 - **Paired t-tests** and **Wilcoxon signed-rank tests** for all LDA vs. method comparisons
-- **Pareto analysis** for accuracy–cost tradeoff (LDA: 7/8 Pareto-optimal; Full: 0/8)
-- **Data efficiency study**: LDA crossover at ~25–50% training data; below that, full features preferred
+- **Pareto analysis** for accuracy–cost tradeoff (Full features: never Pareto-optimal on coarse-grained)
+- **Fine-grained boundary condition**: CUB-200 establishes clear failure mode for LDA
+- **Data efficiency study**: LDA crossover at ~25–50% training data
 - **Component sweep**: d = C−1 confirmed optimal; monotonic improvement, no overfitting
 
 ---
@@ -192,9 +208,9 @@ pdflatex main && bibtex main && pdflatex main && pdflatex main
   title={Supervised Dimensionality Reduction Revisited: Why {LDA} on Frozen {CNN}
          Features Deserves a Second Look},
   author={Kumar, Indar and Karhana, Girish and Jasti, Sai Krishna and Lade, Ankit Hemant},
-  journal={IEEE Transactions on Neural Networks and Learning Systems},
+  journal={arXiv preprint arXiv:2604.03928},
   year={2026},
-  note={Under review}
+  url={https://arxiv.org/abs/2604.03928}
 }
 ```
 

@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+efficientnet,cub200,Full,control,LogReg,78.05,0.0,1280,1280,200,199,0.0,39.13,39.13,5,OK
+efficientnet,cub200,PCA,control,LogReg,73.33,0.0,199,1280,200,199,36.84,15.86,52.69,5,OK
+efficientnet,cub200,LDA,classical,LogReg,75.32,0.0,199,1280,200,199,108.96,18.76,127.72,5,OK
+efficientnet,cub200,PCA+LDA,classical,LogReg,75.16,0.0,199,1280,200,199,203.91,16.42,220.33,5,OK
+efficientnet,cub200,R-LDA,classical,LogReg,74.27,0.0,199,1280,200,199,138.15,19.39,157.55,5,OK
+efficientnet,cub200,LFDA,academic,LogReg,73.56,0.0,199,1280,200,199,60.3,23.35,83.66,5,OK
+efficientnet,cub200,NCA,academic,LogReg,72.66,0.0,199,1280,200,199,673.69,27.44,701.13,5,OK
+efficientnet,cub200,RDA,ours,LogReg,75.79,0.0,224,1280,200,199,103.69,16.14,119.82,5,OK
+efficientnet,cub200,DSB,ours,LogReg,75.66,0.0,199,1280,200,199,162.47,14.59,177.06,5,OK
+efficientnet,cub200,RDA+SMD,ours,LogReg,76.82,0.0,224,1280,200,199,813.15,9.62,822.78,5,OK

@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+efficientnet,cifar100,Full,control,LogReg,71.58,0.0,1280,1280,100,99,0.0,579.02,579.02,5,OK
+efficientnet,cifar100,PCA,control,LogReg,69.77,0.0,99,1280,100,99,22.11,41.54,63.65,5,OK
+efficientnet,cifar100,LDA,classical,LogReg,72.3,0.0,99,1280,100,99,213.52,44.85,258.37,5,OK
+efficientnet,cifar100,PCA+LDA,classical,LogReg,70.79,0.0,99,1280,100,99,148.55,45.52,194.07,5,OK
+efficientnet,cifar100,R-LDA,classical,LogReg,71.93,0.0,99,1280,100,99,93.63,44.13,137.76,5,OK
+efficientnet,cifar100,LFDA,academic,LogReg,69.19,0.0,99,1280,100,99,60.36,27.97,88.33,5,OK
+efficientnet,cifar100,NCA,academic,LogReg,69.83,0.0,99,1280,100,99,631.87,34.66,666.53,5,OK
+efficientnet,cifar100,RDA,ours,LogReg,72.41,0.0,124,1280,100,99,134.67,82.63,217.3,5,OK
+efficientnet,cifar100,DSB,ours,LogReg,72.63,0.0,99,1280,100,99,125.83,26.37,152.2,5,OK
+efficientnet,cifar100,RDA+SMD,ours,LogReg,72.31,0.0,124,1280,100,99,231.21,52.92,284.13,5,OK

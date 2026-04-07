@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+efficientnet,tiny_imagenet,Full,control,LogReg,71.67,0.0,1280,1280,200,199,0.0,777.99,777.99,5,OK
+efficientnet,tiny_imagenet,PCA,control,LogReg,71.75,0.0,199,1280,200,199,33.42,240.63,274.05,5,OK
+efficientnet,tiny_imagenet,LDA,classical,LogReg,72.32,0.0,199,1280,200,199,199.81,216.44,416.25,5,OK
+efficientnet,tiny_imagenet,PCA+LDA,classical,LogReg,72.11,0.0,199,1280,200,199,183.18,72.9,256.08,5,OK
+efficientnet,tiny_imagenet,R-LDA,classical,LogReg,72.53,0.0,199,1280,200,199,51.54,50.43,101.96,5,OK
+efficientnet,tiny_imagenet,LFDA,academic,LogReg,71.97,0.0,199,1280,200,199,27.45,86.95,114.4,5,OK
+efficientnet,tiny_imagenet,NCA,academic,LogReg,72.27,0.0,199,1280,200,199,303.43,69.78,373.21,5,OK
+efficientnet,tiny_imagenet,RDA,ours,LogReg,71.89,0.0,224,1280,200,199,77.17,81.64,158.8,5,OK
+efficientnet,tiny_imagenet,DSB,ours,LogReg,72.11,0.0,199,1280,200,199,160.24,59.06,219.3,5,OK
+efficientnet,tiny_imagenet,RDA+SMD,ours,LogReg,72.04,0.0,224,1280,200,199,220.21,62.18,282.39,5,OK

@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+resnet18,cub200,Full,control,LogReg,62.89,0.0,512,512,200,199,0.0,37.81,37.81,5,OK
+resnet18,cub200,PCA,control,LogReg,55.35,0.0,199,512,200,199,8.39,19.44,27.83,5,OK
+resnet18,cub200,LDA,classical,LogReg,57.73,0.0,199,512,200,199,39.72,19.95,59.67,5,OK
+resnet18,cub200,PCA+LDA,classical,LogReg,57.73,0.0,199,512,200,199,48.73,20.01,68.74,5,OK
+resnet18,cub200,R-LDA,classical,LogReg,56.52,0.0,199,512,200,199,41.02,16.74,57.76,5,OK
+resnet18,cub200,LFDA,academic,LogReg,55.71,0.0,199,512,200,199,14.42,21.9,36.32,5,OK
+resnet18,cub200,NCA,academic,LogReg,56.25,0.0,199,512,200,199,539.42,28.15,567.57,5,OK
+resnet18,cub200,RDA,ours,LogReg,58.77,0.0,219,512,200,199,52.0,17.98,69.99,5,OK
+resnet18,cub200,DSB,ours,LogReg,57.89,0.0,199,512,200,199,87.09,18.72,105.81,5,OK
+resnet18,cub200,RDA+SMD,ours,LogReg,59.39,0.0,219,512,200,199,202.63,18.66,221.29,5,OK

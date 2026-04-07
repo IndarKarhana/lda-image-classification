@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+dinov2_vits14,tiny_imagenet,Full,control,LogReg,78.25,0.0,384,384,200,199,0.0,620.06,620.06,5,OK
+dinov2_vits14,tiny_imagenet,PCA,control,LogReg,79.83,0.0,199,384,200,199,2.46,124.43,126.89,5,OK
+dinov2_vits14,tiny_imagenet,LDA,classical,LogReg,79.67,0.0,199,384,200,199,15.69,116.82,132.51,5,OK
+dinov2_vits14,tiny_imagenet,PCA+LDA,classical,LogReg,79.33,0.0,199,384,200,199,23.38,133.96,157.34,5,OK
+dinov2_vits14,tiny_imagenet,R-LDA,classical,LogReg,79.65,0.0,199,384,200,199,4.99,72.0,76.99,5,OK
+dinov2_vits14,tiny_imagenet,LFDA,academic,LogReg,79.64,0.0,199,384,200,199,18.62,73.19,91.82,5,OK
+dinov2_vits14,tiny_imagenet,NCA,academic,LogReg,79.92,0.0,199,384,200,199,282.01,65.63,347.64,5,OK
+dinov2_vits14,tiny_imagenet,RDA,ours,LogReg,79.42,0.0,219,384,200,199,5.77,77.31,83.07,5,OK
+dinov2_vits14,tiny_imagenet,DSB,ours,LogReg,79.0,0.0,199,384,200,199,181.94,76.03,257.97,5,OK
+dinov2_vits14,tiny_imagenet,RDA+SMD,ours,LogReg,79.4,0.0,219,384,200,199,11.99,102.94,114.93,5,OK

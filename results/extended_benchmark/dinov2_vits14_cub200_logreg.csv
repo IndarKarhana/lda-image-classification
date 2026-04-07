@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+dinov2_vits14,cub200,Full,control,LogReg,87.73,0.0,384,384,200,199,0.0,49.06,49.06,5,OK
+dinov2_vits14,cub200,PCA,control,LogReg,85.62,0.0,199,384,200,199,5.09,18.79,23.88,5,OK
+dinov2_vits14,cub200,LDA,classical,LogReg,85.61,0.0,199,384,200,199,25.01,19.05,44.06,5,OK
+dinov2_vits14,cub200,PCA+LDA,classical,LogReg,85.67,0.0,199,384,200,199,28.48,18.26,46.74,5,OK
+dinov2_vits14,cub200,R-LDA,classical,LogReg,85.76,0.0,199,384,200,199,9.33,19.34,28.67,5,OK
+dinov2_vits14,cub200,LFDA,academic,LogReg,86.23,0.0,199,384,200,199,8.98,20.12,29.1,5,OK
+dinov2_vits14,cub200,NCA,academic,LogReg,85.99,0.0,199,384,200,199,217.7,28.71,246.41,5,OK
+dinov2_vits14,cub200,RDA,ours,LogReg,86.3,0.0,219,384,200,199,32.11,18.1,50.21,5,OK
+dinov2_vits14,cub200,DSB,ours,LogReg,85.76,0.0,199,384,200,199,78.98,18.53,97.51,5,OK
+dinov2_vits14,cub200,RDA+SMD,ours,LogReg,86.16,0.0,219,384,200,199,95.06,19.32,114.38,5,OK

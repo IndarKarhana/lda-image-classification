@@ -1,0 +1,11 @@
+backbone,dataset,method,category,classifier,accuracy_mean,accuracy_std,dim,feature_dim,n_classes,n_components,time_reduce,time_classify,time_total,n_seeds,status
+mobilenetv3,cub200,Full,control,LogReg,63.01,0.0,576,576,200,199,0.0,49.09,49.09,5,OK
+mobilenetv3,cub200,PCA,control,LogReg,58.08,0.0,199,576,200,199,10.96,19.92,30.88,5,OK
+mobilenetv3,cub200,LDA,classical,LogReg,59.3,0.0,199,576,200,199,45.06,17.05,62.11,5,OK
+mobilenetv3,cub200,PCA+LDA,classical,LogReg,59.3,0.0,199,576,200,199,57.03,16.33,73.37,5,OK
+mobilenetv3,cub200,R-LDA,classical,LogReg,58.82,0.0,199,576,200,199,42.65,18.88,61.53,5,OK
+mobilenetv3,cub200,LFDA,academic,LogReg,59.01,0.0,199,576,200,199,15.51,17.06,32.57,5,OK
+mobilenetv3,cub200,NCA,academic,LogReg,58.65,0.0,199,576,200,199,646.71,22.92,669.64,5,OK
+mobilenetv3,cub200,RDA,ours,LogReg,60.08,0.0,219,576,200,199,56.49,15.73,72.22,5,OK
+mobilenetv3,cub200,DSB,ours,LogReg,60.06,0.0,199,576,200,199,84.99,16.52,101.5,5,OK
+mobilenetv3,cub200,RDA+SMD,ours,LogReg,60.75,0.0,219,576,200,199,248.24,15.79,264.03,5,OK
